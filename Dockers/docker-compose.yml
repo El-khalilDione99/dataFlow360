@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  # ---------------- Neo4j ----------------
+  neo4j:
+    image: neo4j:5
+    container_name: neo4j
+    ports:
+      - "7474:7474"   # HTTP (interface web)
+      - "7687:7687"   # Bolt (driver)
+    environment:
+      - NEO4J_AUTH=neo4j/test1234
+    volumes:
+      - neo4j-data:/data
+
+  # ---------------- MongoDB ----------------
+  mongodb:
+    image: mongo:7.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=rootpass
+    volumes:
+      - mongo-data:/data/db
+
+  # ---------------- Cassandra ----------------
+  cassandra:
+    image: cassandra:4.1
+    container_name: cassandra
+    ports:
+      - "9042:9042"  # CQL port
+    environment:
+      - CASSANDRA_CLUSTER_NAME=MonClusterCassandra
+      - CASSANDRA_DC=dc1
+      - CASSANDRA_RACK=rack1
+    volumes:
+      - cassandra-data:/var/lib/cassandra
+
+  # ---------------- Redis ----------------
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+volumes:
+  neo4j-data:
+  mongo-data:
+  cassandra-data:
+  redis-data:
+
+# ---- Lancer tous les conteneurs 
+# docker compose up -d 
+#-------lancer un conteneneur specifique 
+
+# docker compose up container_name
+
+# acceder a un container 
+
+# docker exec -it container_name bash 
+# avec mongodb
+# docker exec -it mongodb bash 
+# mongosh 
